@@ -16,7 +16,6 @@ module Oceanogr.GSW (
            )
 where
 
-import Oceanogr.Misc (inbetween)
 import Oceanogr.GSWtools (gsw_specvol)
 
 import Data.Ord (comparing)
@@ -153,6 +152,7 @@ interpRRD x y xi
 
       U.mapM_ coincide $ U.zip xi ivec
 
+    
       let interp :: (Double, Double, Int) -> IO ()
           interp (y0, x0, j)
             | not . isNaN $ y0 = return () -- already assigned
@@ -194,6 +194,15 @@ interpRRD x y xi
       U.mapM_ interp $ U.zip3 yi' xi ivec
       Right `fmap` (U.unsafeFreeze yi)
 
+--
+-- | find the coodinates surrounding here on ruler
+--
+inbetween :: U.Vector Double -> Double -> Maybe Int
+inbetween ruler here = let ruler' = U.map (subtract here) ruler
+                        in if U.head ruler' * U.last ruler' > 0.0
+                             then Nothing
+                             else U.findIndex (\(p,q) -> p*q <= 0.0) $ U.zip ruler' (U.tail ruler')
+ 
 --
 -- | Simple linear interpolation
 --
