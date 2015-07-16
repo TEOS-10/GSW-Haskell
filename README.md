@@ -9,6 +9,9 @@ the latter is used in this implementation.
 The interfaces (i.e. `foreign import`) are in Oceanogr/GSWtools.hs.
 The attached version is built for [GSW Fortran version 3.03](http://www.teos-10.org/software/gsw_fortran_v3_03.zip). If this is the version to be used
 
+    % cd GSW-Haskell
+    % mkdir gsw_fortran
+    % (cd gsw_fortran && unzip $(DOWNLOAD)/gsw_fortran_v3_03.zip)
     % make obj
     % stack build
     % stack test
@@ -21,8 +24,10 @@ If a different version from 3.03 is to be used;
 - Download the TEOS-10 Fortran version and place it under gsw_fortran.
 
     ```
+    % cd GSW-Haskell
+    % mkdir gsw_fortran
     % cd gsw_fortran
-    % unzip $(DOWNLOAD)/gsw_fortran_vX.Y.zip
+    % unzip $(DOWNLOAD)/gsw_fortran_vX_Y.zip
     ```
 
 - The Fortran toolbox needs to locate the data file *gsw_data_v3_0.dat*.
