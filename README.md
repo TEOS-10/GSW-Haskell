@@ -12,11 +12,12 @@ The attached version is built for [GSW Fortran version 3.03](http://www.teos-10.
     % cd GSW-Haskell
     % mkdir gsw_fortran
     % (cd gsw_fortran && unzip $(DOWNLOAD)/gsw_fortran_v3_03.zip)
+    % edit the location of gsw_data_v3.0.dat if necessary (see below)
     % make obj
     % stack build
     % stack test
 
-will build the library. Building and testing rely on [stack](https://github.com/commercialhaskell/stack). See files under test/ for usage.
+will build the library. Building and testing rely on [stack](https://github.com/commercialhaskell/stack). See files under Test/ for usage.
 
 
 If a different version from 3.03 is to be used;
