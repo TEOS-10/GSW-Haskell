@@ -1,51 +1,30 @@
 # GSW-Haskell
-Haskell interface to Gibbs-SeaWater (GSW) Oceanographic Toolbox in Fortran.
-Although [the development version](https://github.com/TEOS-10/GSW-Fortran)
-appears far ahead of [the published version](http://www.teos-10.org/software.htm),
-the latter is used in this implementation.
+Haskell interface to [Gibbs-SeaWater (GSW) Oceanographic Toolbox](https://www.teos-10.org/).
+Previous versions were interface to FORTRAN versions, but from version 2.0.0.0
+this Haskell version uses the C version. The latest version at the time of writing
+is 3.05. If a different version is to be used, it might be necessary to tweak
+Oceanogr/GSWtools.chs.
 
 ## Install
+Download the C version of the GSW Toolbox from [here](https://www.teos-10.org/software.htm). Install in your favourite directory $(LIB).
 
-The interfaces (i.e. `foreign import`) are in Oceanogr/GSWtools.hs.
-The attached version is built for [GSW Fortran version 3.03](http://www.teos-10.org/software/gsw_fortran_v3_03.zip). If this is the version to be used
+    % cd $(LIB)
+    % unzip $(SRC)/gsw_c_v3.05.zip
 
-    % cd GSW-Haskell
-    % mkdir gsw_fortran
-    % (cd gsw_fortran && unzip $(DOWNLOAD)/gsw_fortran_v3_03.zip)
-    % edit the location of gsw_data_v3.0.dat if necessary (see below)
-    % make obj
-    % stack build
-    % stack test
+It's a good idea to test the C version.
 
-will build the library. Building and testing rely on [stack](https://github.com/commercialhaskell/stack). See files under Test/ for usage.
+    % cd gsw_c_v3.05
+    % make
+    % ./gsw_check
 
+Build the shared library
 
-If a different version from 3.03 is to be used;
+    % make library
 
-- Download the TEOS-10 Fortran version and place it under gsw_fortran.
+The interfaces (i.e. `foreign import`s) are automatically generated from Oceanogr/GSWtools.chs by [c2hs](https://wiki.haskell.org/C2hs). The attached version is for [GSW C version 3.05](http://www.teos-10.org/software/gsw_C_v3_05.zip). It might be necessary to modify Oceanogr/GSWtools.chs if different version is to be used.
 
-    ```
-    % cd GSW-Haskell
-    % mkdir gsw_fortran
-    % cd gsw_fortran
-    % unzip $(DOWNLOAD)/gsw_fortran_vX_Y.zip
-    ```
+Before compiling, modify `include-dirs` and `extra-lib-dirs` in GSW.cabal. Note that the paths must be absolute ([issue](https://github.com/haskell/cabal/issues/2641) with cabal). If the C library in $(LIB) cannot be found at runtime, it is possible to add $(LIB) to the runtime library search path by
 
-- The Fortran toolbox needs to locate the data file *gsw_data_v3_0.dat*.
+    ghc-options: -optl-Wl,-rpath,$(LIB)/gsw_c_v3.05/
 
-        ```
-        --- gsw_oceanographic_toolbox.f90.dist  2015-07-14 10:38:42.000000000 +0900
-        +++ gsw_oceanographic_toolbox.f90       2015-07-14 10:39:33.000000000 +0900
-        @@ -3835,7 +3835,7 @@
-        if(icalled.eq.0d0) then
-        icalled = 1
-        -   open(10,file='gsw_data_v3_0.dat',status='old',err=1)
-        +   open(10,file='/opt/lib/GSW/gsw_fortran/gsw_data_v3_0.dat',status='old',err=1)
-        flag_saar = 1
-        read(10,*) (longs_ref(i), i=1,nx)
-        read(10,*) (lats_ref(i), i=1,ny)
-        ```
-
-- `% make gentool` will yield generate GSWtools.hs. Edit this.
-
-- When ready, `% mv GSWtools.hs Oceangr/`.
+entry in the GSW.cabal file.

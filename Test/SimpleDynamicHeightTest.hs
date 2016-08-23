@@ -1,6 +1,6 @@
 module Main where
 import Oceanogr.GSW
--- import Oceanogr.GSWtools
+import Oceanogr.GSWtools
 
 import Control.Monad as C
 import Data.Ord (comparing)
@@ -10,12 +10,18 @@ import Text.Printf
 
 main :: IO ()
 main = do
-    let matlabOutput = [23.3966,21.8627,20.3569,18.9108,17.5249,16.1720,14.8538,
-                    13.5829,12.3850,11.2573,10.1976,9.2010,8.2643,7.3888,6.5711,
-                    5.7996,5.0658,4.3608,3.6819,3.0276,2.3936,1.7751,1.1698,0.5783,
-                    0,(-0.5666),(-1.1240),(-1.6711)] :: [Double]
-        mpres = [100, 200 .. 2800] :: [Double]
 
+    let matOut, matOutIntrp :: [Double]
+        matOut = [24.935470, 24.206508, 23.452009, 22.715286, 21.962051, 20.496888,
+                  19.089137, 17.738121, 16.435467, 15.148141, 13.901794, 12.721671,
+                  11.607833, 10.558857, 8.6406232, 6.9477307, 5.4534273, 4.0812897,
+                  2.9007551, 1.6775919, 0.50250733, (-0.62856791), (-2.0876251), (-2.7151673)]
+        matOutIntrp = [23.405964,21.871422,20.366272,18.922001,17.534582,16.183310,
+                       14.865464,13.597639,12.400151,11.272593,10.222672,9.2338914,
+                       8.2915732,7.4189482,6.5915755,5.8173250,5.0785649,4.3712775,
+                       3.6921749,3.0326584,2.4015048,1.7774420,1.1765406,0.58005098,
+                       0.0055197216,(-0.56573040),(-1.1149203),(-1.6613837)]
+        mpres = [100, 200 .. 2800] :: [Double]
 
     c <- readFile "Test/example.dat"
 
@@ -29,31 +35,26 @@ main = do
                                                t  = read (ws !! 1) :: Double
                                                p  = read (ws !! 2) :: Double
                                             in (s,t,p)) $ tail ls -- skip the header line
-        salt = U.fromList ss :: U.Vector Double
-        temp = U.fromList ts :: U.Vector Double
-        pres = U.fromList ps :: U.Vector Double
-        pint' = U.fromList [100 .. 2800] :: U.Vector Double
+        sa = U.fromList ss :: U.Vector Double
+        ct = U.fromList ts :: U.Vector Double
+        pr = U.fromList ps :: U.Vector Double
+        pi'= U.fromList mpres :: U.Vector Double
 
-    sintp' <- interp1 pres salt pint'
-    printf "Depth     Haskell    Matlab\n"
-    case sintp' of
-        Left e0 -> error e0
-        Right sintp'' -> do
-            let (pint, sintp) = U.unzip $
-                                U.takeWhile (\(_,s0) -> (not . isNaN) s0) (U.zip pint' sintp'')
+    g <- gsw_geo_strf_dyn_height (U.toList sa) (U.toList ct) (U.toList pr) 2500.0 (U.length pr)
 
-            tintp' <- interp1 pres temp pint'
-            case tintp' of
-                Left e1 -> error e1
-                Right tintp'' -> do
-                    let tintp = snd $ U.unzip $
-                                U.takeWhile (\(_,t0) -> (not . isNaN) t0) (U.zip pint' tintp'')
-
-                    g <- gsw_geo_strf_dyn_height sintp tintp pint 2500.0
-
-                    case g of
-                      Left e1  -> error e1
-                      Right g1 -> C.forM_ [0 .. (Prelude.length mpres - 1)] (\i ->
-                        let j = U.minIndexBy (comparing abs) $ U.map (subtract $ mpres !! i) pint
-                         in printf "%10.0f %10.4f %10.4f\n" (mpres !! i) (g1 U.! j) (matlabOutput !! i))
-                        
+    case g of
+        Nothing -> error "gsw_geo_strf_dyn_height: error"
+        Just g1 -> do printf "Uninterpolated\n"
+                      printf "Depth     Haskell    Matlab\n"
+                      C.forM_ [0 .. (U.length pr - 1)] $ \i ->
+                        printf "%10.0f %10.4f %10.4f\n" (pr U.! i) (g1 !! i) (matOut !! i)
+   
+                      gintp' <- interp1 pr (U.fromList g1) pi'
+                      -- gintp' <- linearInterp1 pr (U.fromList g1) pi'
+                      case gintp' of
+                          Left e1 -> error e1
+                          Right gintp -> do printf "Interpolated\n"
+                                            printf "Depth     Haskell    Matlab\n"
+                                            C.forM_ [0 .. (Prelude.length mpres - 1)] $ \i ->
+                                              printf "%10.0f %10.4f %10.4f\n" (mpres !! i)
+                                                              (gintp U.! i) (matOutIntrp !! i)
