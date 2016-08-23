@@ -1,9 +1,9 @@
 # GSW-Haskell
 Haskell interface to [Gibbs-SeaWater (GSW) Oceanographic Toolbox](https://www.teos-10.org/).
-Previous versions were interface to FORTRAN versions, but from version 2.0.0.0
-this Haskell version uses the C version. The latest version at the time of writing
-is 3.05. If a different version is to be used, it might be necessary to tweak
-Oceanogr/GSWtools.chs.
+Previous versions were interface to FORTRAN toolbox, but from version 2.0.0.0,
+this Haskell version uses the C toolbox. The latest version of the C toolbox
+at the time of writing is 3.05. If a different version is to be used, it might
+be necessary to tweak Oceanogr/GSWtools.chs.
 
 ## Install
 Download the C version of the GSW Toolbox from [here](https://www.teos-10.org/software.htm). Install in your favourite directory $(LIB).
