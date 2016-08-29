@@ -1,0 +1,20 @@
+--- gsw_saar.c	2015-08-10 11:41:07.000000000 +0900
++++ ../../gsw_c_v3.05_1/gsw_saar.c	2016-08-29 14:30:58.907856061 +0900
+@@ -70,7 +70,7 @@
+ 	ndepth_max	= -1.0;
+ 	for (k=0; k < 4; k++) {
+ 	    ndepth_index	= indy0+delj[k]+(indx0+deli[k])*ny;
+-	    if (ndepth_ref[ndepth_index] > 0.0)
++	    if (ndepth_ref[ndepth_index] > 0.0 && ndepth_ref[ndepth_index] < 1.0e90)
+ 		ndepth_max = max(ndepth_max, ndepth_ref[ndepth_index]);
+ 	}
+ 
+@@ -176,7 +176,7 @@
+ 	ndepth_max	= -1;
+ 	for (k=0; k<4; k++) {
+ 	    ndepth_index	= indy0+delj[k]+(indx0+deli[k])*ny;
+-	    if (ndepth_ref[ndepth_index] > 0.0)
++	    if (ndepth_ref[ndepth_index] > 0.0 && ndepth_ref[ndepth_index] < 1.0e90)
+ 		ndepth_max	= max(ndepth_max, ndepth_ref[ndepth_index]);
+ 	}
+ 

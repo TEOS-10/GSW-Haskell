@@ -17,6 +17,9 @@ It's a good idea to test the C version.
     % make
     % ./gsw_check
 
+A patch is recommended to deal with a [problem](https://github.com/TEOS-10/GSW-C/pull/2) related to land value of saar.
+    % patch < $(SOMEWHERE)/patch.gsw
+
 Build the shared library
 
     % make library
@@ -28,3 +31,14 @@ Before compiling, modify `include-dirs` and `extra-lib-dirs` in GSW.cabal. Note 
     ghc-options: -optl-Wl,-rpath,$(LIB)/gsw_c_v3.05/
 
 entry in the GSW.cabal file.
+Then,
+
+    % stack install
+    
+will install the library.
+
+### Changes
+
+0.2.0.1 With gsw_c_v3.05_1.zip
+
+0.2.0.0 With gsw_c_v3.05.zip
