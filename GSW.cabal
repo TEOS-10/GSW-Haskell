@@ -16,12 +16,12 @@ library
                        Oceanogr.GSWtools
   other-extensions:    ForeignFunctionInterface, TypeFamilies, ScopedTypeVariables
   build-tools:         c2hs
-  include-dirs:        /home/ka/lib/C/gsw_c_v3.05_1/
+  include-dirs:        $(LIB)/gsw_c_v3.05/
   build-depends:       base,
                        ieee754,
                        vector
   default-language:    Haskell2010
-  extra-lib-dirs:      /home/ka/lib/C/gsw_c_v3.05_1/
+  extra-lib-dirs:      $(LIB)/gsw_c_v3.05/
   extra-libraries:     gswteos-10
 
 Test-Suite simpleTool
@@ -31,7 +31,7 @@ Test-Suite simpleTool
   build-depends: base,
                  GSW
   default-language: Haskell2010
-  ghc-options: -optl-Wl,-rpath,/home/ka/lib/C/gsw_c_v3.05_1/
+  -- ghc-options: -optl-Wl,-rpath,$(LIB)/gsw_c_v3.05/
 
 Test-Suite simpleDH
   type: exitcode-stdio-1.0
@@ -41,4 +41,4 @@ Test-Suite simpleDH
                  GSW,
                  vector
   default-language: Haskell2010
-  ghc-options: -optl-Wl,-rpath,/home/ka/lib/C/gsw_c_v3.05_1/
+  -- ghc-options: -optl-Wl,-rpath,$(LIB)/gsw_c_v3.05/

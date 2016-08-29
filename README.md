@@ -18,6 +18,7 @@ It's a good idea to test the C version.
     % ./gsw_check
 
 A patch is recommended to deal with a [problem](https://github.com/TEOS-10/GSW-C/pull/2) related to land value of saar.
+
     % patch < $(SOMEWHERE)/patch.gsw
 
 Build the shared library
