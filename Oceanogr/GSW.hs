@@ -13,8 +13,7 @@ module Oceanogr.GSW (
            )
 where
 
-import Control.Monad (when, unless)
-import Data.Ord (comparing)
+import Control.Monad (when)
 import qualified Data.Vector.Unboxed as U
 import qualified Data.Vector.Unboxed.Mutable as UM
 import Numeric.IEEE (nan)
@@ -128,13 +127,13 @@ interpRRD x y xi
       let xfn = U.fromList [0, 300, 1800, 8000] :: U.Vector Double
           yfn = U.fromList [50, 200, 650, 1250] :: U.Vector Double
 
-          interp1 :: Double -> Double
-          interp1 x0 = case U.findIndex (x0<) xfn of
-                        Nothing -> error $ "too deep at x=" ++ show x0
-                        Just i0 -> (x0 - xfn U.! (i0-1)) * (yfn U.! i0 - yfn U.! (i0-1))
+          interp1' :: Double -> Double
+          interp1' x0 = case U.findIndex (x0<) xfn of
+                         Nothing -> error $ "too deep at x=" ++ show x0
+                         Just i0 -> (x0 - xfn U.! (i0-1)) * (yfn U.! i0 - yfn U.! (i0-1))
                                                          / (xfn U.! i0 - xfn U.! (i0-1))
                                        + yfn U.! (i0-1)
-          maxDis = U.map interp1 xi
+          maxDis = U.map interp1' xi
           ilen   = U.length xi
           ivec   = U.fromList [0 .. (ilen-1)] :: U.Vector Int
 
@@ -179,13 +178,13 @@ interpRRD x y xi
                                                  + abs (intp - extr) ** 1.7
                                             nume = abs (extl - intp) ** 1.7 * extr
                                                  + abs (intp - extr) ** 1.7 * extl
-                                            y0'' = if abs deno < 1.0e-4
+                                            y9'' = if abs deno < 1.0e-4
                                                    then intp
                                                    else (intp + nume / deno) * 0.5
                                             -- do not overshoot
-                                            y0'  = max y0'' $ min (y U.! i0) (y U.! (i0+1))
-                                            y0   = min y0'  $ max (y U.! i0) (y U.! (i0+1))
-                                         in UM.write yi j y0
+                                            y9'  = max y9'' $ min (y U.! i0) (y U.! (i0+1))
+                                            y9   = min y9'  $ max (y U.! i0) (y U.! (i0+1))
+                                         in UM.write yi j y9
       yi' <- U.freeze yi
       U.mapM_ interp $ U.zip3 yi' xi ivec
       Right `fmap` U.unsafeFreeze yi

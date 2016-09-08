@@ -13,10 +13,10 @@ module Oceanogr.GSWtools where
 
 import Foreign
 import Foreign.C.Types
-import Foreign.Ptr
-import Foreign.Storable
-import Foreign.Marshal.Alloc
-import Foreign.Marshal.Array
+-- import Foreign.Ptr
+-- import Foreign.Storable
+-- import Foreign.Marshal.Alloc
+-- import Foreign.Marshal.Array
 
 #include "gswteos-10.h"
 --

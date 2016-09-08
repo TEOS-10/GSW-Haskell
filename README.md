@@ -39,6 +39,7 @@ Then,
 will install the library.
 
 ### Changes
+0.2.0.2 Bug fixes
 
 0.2.0.1 With gsw_c_v3.05_1.zip
 
