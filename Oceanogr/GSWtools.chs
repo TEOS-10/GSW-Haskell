@@ -159,10 +159,11 @@ peekArray4 d = map realToFrac `fmap` peekArray 4 d
 {#fun unsafe gsw_ct_freezing
         {`Double', `Double', `Double'} -> `Double' #}
 
+-- removed (https://github.com/TEOS-10/GSW-C/pull/12)
 -- double
 -- gsw_ct_freezing_exact(double sa, double p, double saturation_fraction)
-{#fun unsafe gsw_ct_freezing_exact
-        {`Double', `Double', `Double'} -> `Double' #}
+-- {#fun unsafe gsw_ct_freezing_exact
+--        {`Double', `Double', `Double'} -> `Double' #}
 
 -- void
 -- gsw_ct_freezing_first_derivatives(double sa, double p,
@@ -319,6 +320,11 @@ peekArray4 d = map realToFrac `fmap` peekArray 4 d
         {`Double', `Double',
          alloca- `Double' peekFloatConv*,
          alloca- `Double' peekFloatConv*} -> `()' #}
+
+-- double
+-- gsw_entropy_from_ct(double sa, double ct)
+{#fun unsafe gsw_entropy_from_ct
+        {`Double', `Double'} -> `Double' #}
 
 -- double
 -- gsw_entropy_from_pt(double sa, double pt)
@@ -650,6 +656,11 @@ gsw_nsquared sa ct p lat nz =
                free n2'
                free pMid'
                return (n2, pMid)
+
+-- double
+-- gsw_p_from_z(double z, double lat)
+{#fun unsafe gsw_p_from_z
+        {`Double', `Double'} -> `Double' #}
 
 -- double
 -- gsw_pot_enthalpy_from_pt_ice(double pt0_ice)
@@ -1149,10 +1160,11 @@ gsw_rr68_interp_sa_ct sa ct p mp pI mpI =
 {#fun unsafe gsw_t_freezing
         {`Double', `Double', `Double'} -> `Double' #}
 
+-- removed (https://github.com/TEOS-10/GSW-C/pull/12)
 -- double
 -- gsw_t_freezing_exact (double sa, double p, double saturation_fraction)
-{#fun unsafe gsw_t_freezing_exact
-        {`Double', `Double', `Double'} -> `Double' #}
+-- {#fun unsafe gsw_t_freezing_exact
+--        {`Double', `Double', `Double'} -> `Double' #}
 
 -- void
 -- gsw_t_freezing_first_derivatives(double sa, double p,
@@ -1171,10 +1183,10 @@ gsw_rr68_interp_sa_ct sa ct p mp pI mpI =
          alloca- `Double' peekFloatConv*} -> `()' #}
 
 -- double
--- gsw_t_freezing_poly(double sa, double p, double saturation_fraction,
--- 			int polynomial)
+-- gsw_t_freezing_poly(double sa, double p, double saturation_fraction)
+-- 			int polynomial) -- removed (https://github.com/TEOS-10/GSW-C/pull/12)
 {#fun unsafe gsw_t_freezing_poly
-        {`Double', `Double', `Double', `Int'} -> `Double' #}
+        {`Double', `Double', `Double'} -> `Double' #}
 
 -- double
 -- gsw_t_from_ct(double sa, double ct, double p)

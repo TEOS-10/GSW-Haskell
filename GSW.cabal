@@ -1,5 +1,22 @@
+--
+-- There seems to be a bug in c2hs-2.28.2
+-- https://github.com/haskell/c2hs/issues/192
+--
+-- To work this around,
+-- (1) /usr/include/bits/mathcalls-helper-functions.h
+--     was replaced with
+--     /usr/include/bits/mathcalls-helper-functions.h.workaround
+--     where the latter was produced by hand-replacing
+--     `_Mdoubel_' in the former with `double'.
+--
+-- (2)  After copying $(LIB)/gswteos10.h into Oceanogr
+--     % stack exec c2hs GSW.chs
+-- 
+-- (3) Modify this file
+-- (4) Recover /usr/include/bits/mathcalls-helper-functions.h
+--
 name:                GSW
-version:             0.2.0.2
+version:             0.2.0.3
 -- synopsis:            
 -- description:         
 license:             OtherLicense
@@ -14,14 +31,15 @@ cabal-version:       >=1.10
 library
   exposed-modules:     Oceanogr.GSW,
                        Oceanogr.GSWtools
-  other-extensions:    ForeignFunctionInterface, TypeFamilies, ScopedTypeVariables
-  build-tools:         c2hs
-  include-dirs:        $(LIB)/gsw_c_v3.05_1/
+--  other-extensions:    ForeignFunctionInterface, TypeFamilies, ScopedTypeVariables
+--  build-tools:         c2hs
+  other-extensions:    TypeFamilies, ScopedTypeVariables
+  include-dirs:        lib/C/GSW-C-3.05.0-4/
   build-depends:       base,
                        ieee754,
-                       vector
+                       vector (>= 0.10.2)
   default-language:    Haskell2010
-  extra-lib-dirs:      $(LIB)/gsw_c_v3.05_1/
+  extra-lib-dirs:      lib/C/GSW-C-3.05.0-4/
   extra-libraries:     gswteos-10
   ghc-options:         -Wall -O
 
@@ -32,7 +50,7 @@ Test-Suite simpleTool
   build-depends: base,
                  GSW
   default-language: Haskell2010
---   ghc-options: -optl-Wl,-rpath,$(LIB)/gsw_c_v3.05_1/
+  ghc-options: -optl-Wl,-rpath,lib/C/GSW-C-3.05.0-4/
 
 Test-Suite simpleDH
   type: exitcode-stdio-1.0
@@ -42,4 +60,4 @@ Test-Suite simpleDH
                  GSW,
                  vector
   default-language: Haskell2010
---   ghc-options: -optl-Wl,-rpath,$(LIB)/gsw_c_v3.05_1/
+  ghc-options: -optl-Wl,-rpath,/home/ka/lib/C/GSW-C-3.05.0-4/
