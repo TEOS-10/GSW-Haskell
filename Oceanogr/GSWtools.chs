@@ -661,6 +661,11 @@ gsw_nsquared sa ct p lat nz =
 -- gsw_p_from_z(double z, double lat)
 {#fun unsafe gsw_p_from_z
         {`Double', `Double'} -> `Double' #}
+-- double
+-- gsw_z_from_p(double p, double lat)
+{#fun unsafe gsw_z_from_p
+        {`Double', `Double'} -> `Double' #}
+
 
 -- double
 -- gsw_pot_enthalpy_from_pt_ice(double pt0_ice)
@@ -1292,10 +1297,6 @@ gsw_util_interp1q_int nx x iy nxi xI =
 --                        `Int',
 --                        `Double'} -> `Double' #}
 --
----- double
----- gsw_z_from_p(double p, double lat)
---{#fun unsafe gsw_z_from_p
---        {`Double', `Double'} -> `Double' #}
 --
 ---- double
 ---- gsw_saar(double p, double lon, double lat)

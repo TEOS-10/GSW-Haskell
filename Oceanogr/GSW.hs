@@ -1,7 +1,7 @@
 {-# LANGUAGE TypeFamilies, ScopedTypeVariables #-}
 
 --
--- | Not all functions of GSW in matlab are not exported
+-- | Not all functions of GSW in matlab are exported
 --   to fortran, i.e., FFI is not a full solution.
 --
 module Oceanogr.GSW (
